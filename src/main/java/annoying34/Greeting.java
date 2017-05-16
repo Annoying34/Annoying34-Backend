@@ -1,3 +1,5 @@
+package annoying34;
+
 public class Greeting {
 
     private final long id;
