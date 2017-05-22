@@ -1,4 +1,4 @@
-package annoy34.imap;
+package annoy34.mail;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,9 +7,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import annoy34.imap.ImapException;
-import annoy34.imap.ImapQuery;
-import annoy34.imap.MailAddress;
+import annoy34.mail.ImapException;
+import annoy34.mail.ImapQuery;
+import annoy34.mail.MailAddress;
 
 public class ImapQueryTest {
 	private static final String EMAIL_ADDRESS = "annoying34@gmx.de";

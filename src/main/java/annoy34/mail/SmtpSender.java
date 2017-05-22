@@ -1,4 +1,4 @@
-package annoy34.imap;
+package annoy34.mail;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -7,10 +7,10 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class ImapSender extends ImapAccessor {
+public class SmtpSender extends MailAccessor {
 	private InternetAddress senderAddress;
 
-	public ImapSender(String address, String password, String smtpServer) throws ImapException {
+	public SmtpSender(String address, String password, String smtpServer) throws ImapException {
 		super(address, password);
 		session.getProperties().setProperty("mail.smtp.host", smtpServer);
 		try {

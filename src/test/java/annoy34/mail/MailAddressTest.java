@@ -1,12 +1,12 @@
-package annoy34.imap;
+package annoy34.mail;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
-import annoy34.imap.ImapException;
-import annoy34.imap.MailAddress;
+import annoy34.mail.ImapException;
+import annoy34.mail.MailAddress;
 
-public class MailAddresseTest {
+public class MailAddressTest {
 	
 	// Test cases taken from https://en.wikipedia.org/wiki/Email_address
 	

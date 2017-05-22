@@ -1,4 +1,4 @@
-package annoy34.imap;
+package annoy34.mail;
 
 import javax.mail.Address;
 import javax.mail.internet.AddressException;

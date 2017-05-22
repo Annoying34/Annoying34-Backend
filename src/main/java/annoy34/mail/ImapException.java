@@ -1,4 +1,4 @@
-package annoy34.imap;
+package annoy34.mail;
 
 @SuppressWarnings("serial")
 public class ImapException extends Exception {

@@ -1,6 +1,15 @@
-package annoy34.imap;
+package annoy34.mail;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.security.KeyStoreException;
 import java.util.Set;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 
 public class Test {
 	private static final String EMAIL_ADDRESS = "annoying34@gmx.de";
@@ -11,9 +20,14 @@ public class Test {
 	private static final String RECIPIENT = "annoying34@gmx.de";
 
 	public static void main(String[] args) {
-		retrieveMails();
+		//retrieveMails();
 		System.out.println();
-		sendMail();
+		//sendMail();
+		try {
+			getServers();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void retrieveMails() {
@@ -37,12 +51,19 @@ public class Test {
 		try {
 			long start = System.currentTimeMillis();
 			
-			ImapSender sender = new ImapSender(EMAIL_ADDRESS, EMAIL_PASSWORD, SMTP_SERVER);
+			SmtpSender sender = new SmtpSender(EMAIL_ADDRESS, EMAIL_PASSWORD, SMTP_SERVER);
 			sender.sendMail(RECIPIENT, "Anfrage bzgl. meiner Daten", "Gimme all my data pls");
 			
 			System.out.println("Sending took " + new Long(System.currentTimeMillis() - start) + "ms");
 		} catch (ImapException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void getServers() throws FailingHttpStatusCodeException, MalformedURLException, IOException, KeyStoreException, ParserConfigurationException, SAXException {
+		ServerConfig config = ServerListAccessor.getServerConfig("gmx.de");
+		System.out.println(config.getDomain());
+		System.out.println(config.getImapServer().getHostname());
+		System.out.println(config.getSmtpServer().getPort());
 	}
 }

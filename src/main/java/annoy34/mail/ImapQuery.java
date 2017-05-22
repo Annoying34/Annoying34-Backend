@@ -1,4 +1,4 @@
-package annoy34.imap;
+package annoy34.mail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +17,7 @@ import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Store;
 
-public class ImapQuery extends ImapAccessor {
+public class ImapQuery extends MailAccessor {
 	private Store store;
 	private FetchProfile fetchProfile;
 	

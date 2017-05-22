@@ -1,4 +1,4 @@
-package annoy34.imap;
+package annoy34.mail;
 
 import java.util.Properties;
 
@@ -6,10 +6,10 @@ import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 
-public abstract class ImapAccessor {
+public abstract class MailAccessor {
 	protected Session session;
 	
-	public ImapAccessor(String address, String password) throws ImapException {
+	public MailAccessor(String address, String password) throws ImapException {
 		this.session = getSession(address, password);
 	}
 	
