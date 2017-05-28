@@ -15,9 +15,7 @@ public class Company {
         this.selected = selected;
     }
 
-    public Company(String name) {
-        this.name = name;
-    }
+    Company(){}
 
     public String getName() {
         return name;
