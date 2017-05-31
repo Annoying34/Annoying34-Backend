@@ -1,0 +1,26 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()  
+}
+
+dependencies {
+	//compile files('./src/main/libs/local_policy.jar')
+	//compile files('./src/main/libs/US_export_policy.jar')
+	//runtime files('./src/main/libs/local_policy.jar')
+	//runtime files('./src/main/libs/US_export_policy.jar')
+    compile 'javax.mail:mail:1.4.7'
+	compile 'net.sourceforge.htmlunit:htmlunit:2.26'
+    testCompile 'junit:junit:4.12'         
+}
+
+jar {
+    baseName = 'annoying34-backend'
+    version =  '0.1.0'
+}
+
+mainClassName = 'annoy34.mail.Test'  
