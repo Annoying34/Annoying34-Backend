@@ -1,11 +1,25 @@
 package annoying34.company;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name = "company")
 public class Company {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column
     private String imageURL = "";
+
+    @Transient
     private boolean selected = false;
 
     public Company(String name, String email, String imageURL, boolean selected) {
@@ -15,7 +29,16 @@ public class Company {
         this.selected = selected;
     }
 
-    Company(){}
+    public Company() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -50,24 +73,13 @@ public class Company {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Company company = (Company) o;
-
-        if (selected != company.selected) return false;
-        if (name != null ? !name.equals(company.name) : company.name != null) return false;
-        if (email != null ? !email.equals(company.email) : company.email != null) return false;
-        return imageURL != null ? imageURL.equals(company.imageURL) : company.imageURL == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (imageURL != null ? imageURL.hashCode() : 0);
-        result = 31 * result + (selected ? 1 : 0);
-        return result;
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                ", selected=" + selected +
+                '}';
     }
 }
