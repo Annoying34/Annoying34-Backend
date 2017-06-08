@@ -1,15 +1,15 @@
 package annoying34.company;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class CompanyService {
 
-    private CompanyDao companyDao;
+    private final CompanyDao companyDao;
 
     @Autowired
     public CompanyService(CompanyDao companyDao) {
@@ -19,12 +19,12 @@ public class CompanyService {
     public List<Company> getCompanies() {
         List<Company> companyList = new ArrayList<>();
 
-        companyDao.findAll().forEach( company -> companyList.add(company));
+        companyDao.findAll().forEach(companyList::add);
 
         //TODO init data elsewhere
         if (companyList.isEmpty()) {
             createDemoCompanyData();
-            companyDao.findAll().forEach( company -> companyList.add(company));
+            companyDao.findAll().forEach(companyList::add);
         }
 
         return companyList;
@@ -33,7 +33,7 @@ public class CompanyService {
     //TODO implement search :-)
     public List<Company> getCompanies(CompanySearch search) {
         List<Company> companyList = new ArrayList<>();
-        companyDao.findAll().forEach( company -> companyList.add(company));
+        companyDao.findAll().forEach(companyList::add);
         companyList.add(new Company("fizzbuzz", search.getEmail(), "", true));
 
         return companyList;
