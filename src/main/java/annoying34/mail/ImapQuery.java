@@ -1,26 +1,13 @@
-package annoy34.mail;
+package annoying34.mail;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.mail.*;
+import java.util.*;
 import java.util.stream.Collectors;
-
-import javax.mail.Address;
-import javax.mail.AuthenticationFailedException;
-import javax.mail.FetchProfile;
-import javax.mail.Folder;
-import javax.mail.FolderNotFoundException;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Store;
 
 public class ImapQuery extends MailAccessor {
 	private Store store;
 	private FetchProfile fetchProfile;
-	
+
 	public ImapQuery(String address, String password, String imapServer) throws ImapException {
 		super(address, password);
 		store = getStore(address, password, imapServer);
@@ -28,7 +15,36 @@ public class ImapQuery extends MailAccessor {
 		fp.add(FetchProfile.Item.ENVELOPE);
 		fetchProfile = fp;
 	}
-	
+
+	/**
+	 * Return a {@link Set} of all domains appearing in the given mails
+	 *
+	 * @param addresses A {@link Set} of {@link MailAddress} objects
+	 * @return A {@link Set} of domains
+	 */
+	public static Set<String> getDomains(Set<MailAddress> addresses) {
+		return addresses.stream().map(address -> address.getDomain()).collect(Collectors.toSet());
+	}
+
+	/**
+	 * Convert {@link Address} objects into a {@link Set} of {@link MailAddress} objects, filtering out invalid email addresses.
+	 *
+	 * @param adresses A list of {@link Address} objects
+	 * @return A {@link Set} of {@link MailAddress} objects, representing valid email addresses
+	 */
+	private static Set<MailAddress> convertAdressesToMailAddresses(List<Address> adresses) {
+		Set<MailAddress> mailAddresses = new HashSet<MailAddress>();
+		for (Address address : adresses) {
+			try {
+				mailAddresses.add(new MailAddress(address));
+			} catch (ImapException e) {
+				// Mail address is invalid, don't add it
+			}
+		}
+
+		return mailAddresses;
+	}
+
 	private Store getStore(String address, String password, String imapServer) throws ImapException {
 		try {
 			store = session.getStore("imaps");
@@ -45,6 +61,7 @@ public class ImapQuery extends MailAccessor {
 
 	/**
 	 * Return a {@link Set} of all domains appearing in all senders' email addresses
+	 *
 	 * @return A {@link Set} of domains
 	 * @throws ImapException
 	 */
@@ -53,23 +70,15 @@ public class ImapQuery extends MailAccessor {
 	}
 
 	/**
-	 * Return a {@link Set} of all domains appearing in the given mails
-	 * @param addresses A {@link Set} of {@link MailAddress} objects
-	 * @return A {@link Set} of domains
-	 */
-	public static Set<String> getDomains(Set<MailAddress> addresses) {
-		return addresses.stream().map(address -> address.getDomain()).collect(Collectors.toSet());
-	}
-
-	/**
 	 * Return a {@link Set} of all senders' {@link MailAddress}es
+	 *
 	 * @return A {@link Set} of {@link MailAddress} objects, representing valid email addresses
 	 * @throws ImapException
 	 */
 	public Set<MailAddress> getSenderMailAddresses() throws ImapException {
 		try {
 			List<Address> addresses = new ArrayList<Address>();
-			
+
 			List<Folder> availableFolders = getToplevelFolders();
 			for (Folder folder : availableFolders) {
 				try {
@@ -79,13 +88,13 @@ public class ImapQuery extends MailAccessor {
 					//TODO
 				}
 			}
-			
+
 			return convertAdressesToMailAddresses(addresses);
 		} catch (MessagingException e) {
 			throw new ImapException("Error while trying to retrieve sender mail addresses", e);
 		}
 	}
-	
+
 	private List<Folder> getToplevelFolders() throws MessagingException {
 		List<Folder> folders = new ArrayList<Folder>();
 		folders.addAll(Arrays.asList(store.getPersonalNamespaces()));
@@ -93,7 +102,7 @@ public class ImapQuery extends MailAccessor {
 		folders.add(store.getFolder("INBOX"));
 		return folders;
 	}
-	
+
 	private List<Address> getSenderMailAddresses(Folder folder) throws MessagingException {
 		List<Address> fromAddresses = new ArrayList<Address>();
 		folder.open(Folder.READ_ONLY);
@@ -118,23 +127,5 @@ public class ImapQuery extends MailAccessor {
 			folder.close(false);
 		}
 		return fromAddresses;
-	}
-	
-	/**
-	 * Convert {@link Address} objects into a {@link Set} of {@link MailAddress} objects, filtering out invalid email addresses.
-	 * @param adresses A list of {@link Address} objects
-	 * @return A {@link Set} of {@link MailAddress} objects, representing valid email addresses
-	 */
-	private static Set<MailAddress> convertAdressesToMailAddresses(List<Address> adresses) {
-		Set<MailAddress> mailAddresses = new HashSet<MailAddress>();
-		for (Address address : adresses) {
-			try {
-				mailAddresses.add(new MailAddress(address));
-			} catch (ImapException e) {
-				// Mail address is invalid, don't add it
-			}
-		}
-		
-		return mailAddresses;
 	}
 }

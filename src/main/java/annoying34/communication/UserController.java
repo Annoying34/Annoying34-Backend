@@ -20,15 +20,16 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, value = "/user")
     public String revisit(@RequestParam(value="token") String token) {
         User user = userDao.findByToken(token);
+       /*
         User user2 = new User();
         user2.setEmail("foo@bar.org");
         user2.setFirstname("Lassmiranda");
         user2.setLastname("Dennsiewillja");
         String token2 = new UserService().generateToken(user2);
         userDao.save(user2);
-
+        */
         if(user == null) {
-            return token2;
+            return "";
         } else {
             return user.getFirstname() + " " + user.getLastname();
         }

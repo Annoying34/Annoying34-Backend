@@ -1,26 +1,26 @@
-package annoy34.mail;
+package annoying34.mail;
 
 public class Server {
-	private String hostname;
-	private int port;
-	private String socketType;
-	
-	public Server(String hostname, int port, String socketType) {
-		this.hostname = hostname;
-		this.port = port;
-		this.socketType = socketType;
-	}
+    private String hostname;
+    private int port;
+    private String socketType;
 
-	public String getHostname() {
-		return hostname;
-	}
+    public Server(String hostname, int port, String socketType) {
+        this.hostname = hostname;
+        this.port = port;
+        this.socketType = socketType;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public String getHostname() {
+        return hostname;
+    }
 
-	public String getSocketType() {
-		return socketType;
-	}
+    public int getPort() {
+        return port;
+    }
+
+    public String getSocketType() {
+        return socketType;
+    }
 
 }

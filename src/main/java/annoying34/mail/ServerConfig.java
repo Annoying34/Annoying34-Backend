@@ -1,25 +1,25 @@
-package annoy34.mail;
+package annoying34.mail;
 
 public class ServerConfig {
-	private String domain;
-	private Server imapServer;
-	private Server smtpServer;
-	
-	public ServerConfig(String domain, Server imapServer, Server smtpServer) {
-		this.domain = domain;
-		this.imapServer = imapServer;
-		this.smtpServer = smtpServer;
-	}
+    private String domain;
+    private Server imapServer;
+    private Server smtpServer;
 
-	public String getDomain() {
-		return domain;
-	}
+    public ServerConfig(String domain, Server imapServer, Server smtpServer) {
+        this.domain = domain;
+        this.imapServer = imapServer;
+        this.smtpServer = smtpServer;
+    }
 
-	public Server getImapServer() {
-		return imapServer;
-	}
+    public String getDomain() {
+        return domain;
+    }
 
-	public Server getSmtpServer() {
-		return smtpServer;
-	}
+    public Server getImapServer() {
+        return imapServer;
+    }
+
+    public Server getSmtpServer() {
+        return smtpServer;
+    }
 }

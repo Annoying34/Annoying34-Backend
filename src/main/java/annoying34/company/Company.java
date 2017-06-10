@@ -19,6 +19,9 @@ public class Company {
     @Column
     private String imageURL = "";
 
+    @Column
+    private String domain;
+
     @Transient
     private boolean selected = false;
 
@@ -72,6 +75,14 @@ public class Company {
         this.selected = selected;
     }
 
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
@@ -79,6 +90,7 @@ public class Company {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", imageURL='" + imageURL + '\'' +
+                ", domain='" + domain + '\'' +
                 ", selected=" + selected +
                 '}';
     }
