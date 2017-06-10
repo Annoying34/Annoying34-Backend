@@ -18,7 +18,7 @@ public class Spider {
 	String someString;
 
 	
-	public void search(String url) throws IOException {
+	public CrawlerResult search(String url) throws IOException {
 		while (this.pagesVisited.size() < MAX_PAGES_TO_SEARCH) {
 			String currentUrl;
 			SpiderLeg leg = new SpiderLeg();
@@ -45,6 +45,8 @@ public class Spider {
 			this.pagesToVisit.addAll(leg.getLinks());
 		}
 		System.out.println("\n**Done** Besuchte Seiten: " + this.pagesVisited.size() + " Seiten");
+
+		return new CrawlerResult("email", "favicon");
 	}
 
 	/**
