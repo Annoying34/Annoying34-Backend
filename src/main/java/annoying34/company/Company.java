@@ -25,10 +25,11 @@ public class Company {
     @Transient
     private boolean selected = false;
 
-    public Company(String name, String email, String imageURL, boolean selected) {
+    public Company(String name, String email, String imageURL, String domain, boolean selected) {
         this.name = name;
         this.email = email;
         this.imageURL = imageURL;
+        this.domain = domain;
         this.selected = selected;
     }
 

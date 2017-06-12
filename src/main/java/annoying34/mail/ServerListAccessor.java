@@ -4,6 +4,8 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -22,6 +24,7 @@ import java.util.List;
 
 public class ServerListAccessor {
     public static final String SERVERLIST_BASE_URL = "https://autoconfig.thunderbird.net/v1.1/";
+    private static final Logger log = LogManager.getLogger();
 
     public static ServerConfig getServerConfig(MailAddress mail) {
         return getServerConfig(mail.getDomain());
@@ -33,7 +36,7 @@ public class ServerListAccessor {
             ServerConfig config = parseXML(content, domain);
             return config;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("", e);
             return null;
         }
     }
@@ -48,10 +51,10 @@ public class ServerListAccessor {
             return xmlPage;
         } catch (FailingHttpStatusCodeException | ClassCastException e) {
             // No such domain in ISP database
-            System.out.println("No such domain");
+            log.error("No such domain", e);
         } catch (SSLHandshakeException e) {
             // Java does not support sufficiently strong crypto to communicate with the ISP database
-            System.out.println("Java still doesn't roll out strongest crypto by default");
+            log.error("Java still doesn't roll out strongest crypto by default", e);
         } finally {
             webClient.close();
         }
@@ -124,6 +127,7 @@ public class ServerListAccessor {
     }
 
     private static Server getPreferredSmtpServer(List<Server> servers) {
+
         // 587 is preferred SMTP port for mail clients
         for (Server server : servers) {
             if (server.getPort() == 587) {

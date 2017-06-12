@@ -1,10 +1,15 @@
 package annoying34.company;
 
 import annoying34.mail.*;
+import annoying34.website.CrawlerResult;
+import annoying34.website.Spider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +19,8 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 public class CompanyService {
+    private static final Logger log = LogManager.getLogger();
+
     private final CompanyDao companyDao;
 
     @Autowired
@@ -25,6 +32,7 @@ public class CompanyService {
         List<Company> companyList = new ArrayList<>();
         companyDao.findAll().forEach(companyList::add);
 
+        log.info("load companylist({})", companyList.size());
         return companyList;
     }
 
@@ -45,8 +53,23 @@ public class CompanyService {
         for (Company company : matchingCompanies) {
             domainMap.remove(company.getDomain());
         }
-        //TODO DomainMap does only contains uncached Mail -> Crawl them
-        return new ArrayList<>();
+        return crawlNewCompanies(domainMap);
+    }
+
+    private List<Company> crawlNewCompanies(Map<String, MailAddress> domainMap) {
+        List<Company> resultList = new ArrayList<>();
+        Spider crawler = new Spider();
+        for (String domain : domainMap.keySet()) {
+            try {
+                CrawlerResult result = crawler.search(domain);
+                Company company = new Company("", result.email, result.favicon, domain, true);
+                companyDao.save(company);
+                log.info("New Company({}) saved.", company);
+            } catch (IOException e) {
+                log.error("URL {} could not be parsed", domain, e);
+            }
+        }
+        return resultList;
     }
 
     private List<Company> loadMapFromDBAndCheckFoundDomains(Map<String, MailAddress> domainMap) {
@@ -62,6 +85,7 @@ public class CompanyService {
             ImapQuery query = new ImapQuery(search.getEmail(), search.getPassword(), imapURL);
             senderAddresses = query.getSenderMailAddresses().stream().collect(toMap(MailAddress::getMailAddress, p -> p, (p, q) -> p)).values();
         } catch (ImapException e) {
+            log.error("Could not Query Mail Addresses with {}", search, e);
             return null;
         }
         return senderAddresses.stream().collect(toMap(address -> address.getDomain(), x -> x));
@@ -70,8 +94,10 @@ public class CompanyService {
     private String getImapURL(CompanySearch search) {
         String imapURL = search.getImapURL();
         if (StringUtils.isEmpty(imapURL)) {
+            log.info("crawl Imap Address");
             ServerConfig serverConfig = ServerListAccessor.getServerConfig(search.getEmail());
             imapURL = serverConfig.getImapServer().getHostname();
+            log.info("ImapServer {} detected", imapURL);
         }
         return imapURL;
     }

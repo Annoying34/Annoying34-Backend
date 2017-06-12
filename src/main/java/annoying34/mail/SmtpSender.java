@@ -20,7 +20,6 @@ public class SmtpSender extends MailAccessor {
         }
     }
 
-
     public void sendMail(String recipient, String subject, String content) throws ImapException {
         InternetAddress recipientAddress;
         try {

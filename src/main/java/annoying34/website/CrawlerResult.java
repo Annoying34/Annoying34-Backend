@@ -1,4 +1,4 @@
-package annoying34.crawler;
+package annoying34.website;
 
 /**
  * Created by konde on 10.06.17.
