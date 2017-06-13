@@ -62,7 +62,7 @@ public class CompanyService {
         for (String domain : domainMap.keySet()) {
             try {
                 CrawlerResult result = crawler.search(domain);
-                Company company = new Company("", result.email, result.favicon, domain, true);
+                Company company = new Company(result.name, result.email, result.favicon, domain, true);
                 companyDao.save(company);
                 log.info("New Company({}) saved.", company);
             } catch (IOException e) {

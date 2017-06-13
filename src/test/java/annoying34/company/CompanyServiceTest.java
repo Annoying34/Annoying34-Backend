@@ -33,7 +33,7 @@ public class CompanyServiceTest {
 
     @Test
     public void loadCompanies() throws Exception {
-        this.entityManager.persist(new Company("foo", "foo@bar.org", "icon.ico", true));
+        this.entityManager.persist(new Company("foo", "foo@bar.org", "icon.ico", "foo-bar.de", true));
 
         List<Company> result = service.getCompanies();
         assertFalse(result.isEmpty());
