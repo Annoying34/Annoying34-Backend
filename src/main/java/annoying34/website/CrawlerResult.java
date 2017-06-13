@@ -5,10 +5,12 @@ package annoying34.website;
  */
 public class CrawlerResult {
 
+    public String name;
     public String email;
     public String favicon;
 
-    CrawlerResult(String email, String favicon) {
+    CrawlerResult(String name, String email, String favicon) {
+        this.name = name;
         this.email = email;
         this.favicon = favicon;
     }

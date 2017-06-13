@@ -30,28 +30,15 @@ public class SpiderLeg {
             Document htmlDocument = connection.get();
             this.htmlDocument = htmlDocument;
 
-
-            if (connection.response().statusCode() == 200) // 200 is the HTTP OK
-            // status code
-
-            {
-                System.out.println("\n**Seite wird besucht..* Seite gefunden: " + url);
-            }
             if (!connection.response().contentType().contains("text/html")) {
-                System.out.println("**Failure** no HTML");
                 return false;
             }
+
             Elements linksOnPage = htmlDocument.select("a[href]");
 
             for (Element link : linksOnPage) {
                 this.links.add(link.absUrl("href"));
             }
-            //sammle die Favicons
-            Element element = htmlDocument.head().select("link[href~=.*\\.(ico|png)]").first();
-            System.out.println("Link zum FavIcon: ");
-            System.out.println(element.attr("href"));
-            System.out.println("\n");
-
 
             return true;
         } catch (IOException ioe) {
@@ -60,8 +47,13 @@ public class SpiderLeg {
         }
     }
 
+    public String relativeFavIcon() {
+        Element element = htmlDocument.head().select("link[href~=.*\\.(ico|png)]").first();
+        return element.attr("abs:href");
+    }
+
     // sucht nach Email-Adressen mithilfe von regulären Ausdrücken
-    public void searchFormail(String searchWord) {
+    public String searchFormail(String searchWord) {
 
         Pattern pattern = Pattern.compile("([\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Za-z]{2,4})");
         Pattern pattern2 = Pattern.compile("([\\w\\-]([\\.\\w])+[\\w]+	\\[at\\]([\\w\\-]+\\.)+[A-Za-z]{2,4})");
@@ -72,13 +64,10 @@ public class SpiderLeg {
 
 
         if (matchs.find() || matchs2.find()) {
-
-            System.out.println(searchWord.substring(matchs.start(), matchs.end()));
-
-
+            return searchWord.substring(matchs.start(), matchs.end());
         }
 
-
+        return null;
     }
 
     public List<String> getLinks() {
