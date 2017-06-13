@@ -28,8 +28,7 @@ public class CompaniesController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/companies", consumes = "application/json")
-    @ResponseBody
+    @PostMapping(value = "/companies", consumes = "application/json")
     public void postCompaniesSettings(@RequestHeader(value = "email", defaultValue = "") String email,
                                       @RequestHeader(value = "password", defaultValue = "") String password,
                                       @RequestHeader(value = "imapurl", defaultValue = "") String imapURL,

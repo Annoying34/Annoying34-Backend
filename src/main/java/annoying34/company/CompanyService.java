@@ -29,9 +29,7 @@ public class CompanyService {
     }
 
     public List<Company> getCompanies() {
-        List<Company> companyList = new ArrayList<>();
-        companyDao.findAll().forEach(companyList::add);
-
+        List<Company> companyList = companyDao.findAll();
         log.info("load companylist({})", companyList.size());
         return companyList;
     }
@@ -73,8 +71,7 @@ public class CompanyService {
     }
 
     private List<Company> loadMapFromDBAndCheckFoundDomains(Map<String, MailAddress> domainMap) {
-        List<Company> companyList = new ArrayList<>();
-        companyDao.findAll().iterator().forEachRemaining(companyList::add);
+        List<Company> companyList = companyDao.findAll();
         companyList.stream().filter(x -> domainMap.containsKey(x.getDomain())).forEach(e -> e.setSelected(true));
         return companyList;
     }
@@ -88,7 +85,7 @@ public class CompanyService {
             log.error("Could not Query Mail Addresses with {}", search, e);
             return null;
         }
-        return senderAddresses.stream().collect(toMap(address -> address.getDomain(), x -> x));
+        return senderAddresses.stream().collect(toMap(MailAddress::getDomain, x -> x));
     }
 
     private String getImapURL(CompanySearch search) {
@@ -96,8 +93,10 @@ public class CompanyService {
         if (StringUtils.isEmpty(imapURL)) {
             log.info("crawl Imap Address");
             ServerConfig serverConfig = ServerListAccessor.getServerConfig(search.getEmail());
-            imapURL = serverConfig.getImapServer().getHostname();
-            log.info("ImapServer {} detected", imapURL);
+            if (serverConfig.getImapServer() != null) {
+                imapURL = serverConfig.getImapServer().getHostname();
+                log.info("ImapServer {} detected", imapURL);
+            }
         }
         return imapURL;
     }
