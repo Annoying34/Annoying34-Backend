@@ -56,6 +56,7 @@ public class Spider {
             this.pagesToVisit.addAll(leg.getLinks());
         }
 
+        // TODO: This email might be wrong, we should add better logic to determine which is the support email address.
         return new CrawlerResult(new URL(url).getHost(), emails.getFirst(), favIconURL);
     }
 
