@@ -1,6 +1,6 @@
 package annoy34.mail;
 
-import annoying34.mail.ImapException;
+import annoying34.mail.MailException;
 import annoying34.mail.ImapQuery;
 import annoying34.mail.MailAddress;
 import org.junit.Ignore;
@@ -18,27 +18,27 @@ public class ImapQueryTest {
 
     @Test
     @Ignore("Passing of testRetrieval implies working connection")
-    public void testConnection() throws ImapException {
+    public void testConnection() throws MailException {
         new ImapQuery(EMAIL_ADDRESS, EMAIL_PASSWORD, IMAP_SERVER);
     }
 
-    @Test(expected = ImapException.class)
-    public void testInvalidConnection1() throws ImapException {
+    @Test(expected = MailException.class)
+    public void testInvalidConnection1() throws MailException {
         new ImapQuery("SomeOtherHopefullyNonExistingMailAddress@gmx.de", EMAIL_PASSWORD, IMAP_SERVER);
     }
 
-    @Test(expected = ImapException.class)
-    public void testInvalidConnection2() throws ImapException {
+    @Test(expected = MailException.class)
+    public void testInvalidConnection2() throws MailException {
         new ImapQuery(EMAIL_ADDRESS, "not a valid password", IMAP_SERVER);
     }
 
-    @Test(expected = ImapException.class)
-    public void testInvalidConnection3() throws ImapException {
+    @Test(expected = MailException.class)
+    public void testInvalidConnection3() throws MailException {
         new ImapQuery(EMAIL_ADDRESS, EMAIL_PASSWORD, "invalid.imap.server");
     }
 
     @Test
-    public void testRetrieval() throws ImapException {
+    public void testRetrieval() throws MailException {
         ImapQuery query = new ImapQuery(EMAIL_ADDRESS, EMAIL_PASSWORD, IMAP_SERVER);
         Set<String> senderDomains = query.getSenderDomains();
         assertTrue(senderDomains.contains("produkt.gmx.net"));
@@ -47,7 +47,7 @@ public class ImapQueryTest {
     }
 
     @Test
-    public void testDomainRetrieval() throws ImapException {
+    public void testDomainRetrieval() throws MailException {
         Set<MailAddress> addresses = new HashSet<MailAddress>();
         addresses.add(new MailAddress("abc@def.ghi.jkl"));
         addresses.add(new MailAddress("abc@def.ghi"));

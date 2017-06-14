@@ -8,7 +8,7 @@ import java.util.Properties;
 public abstract class MailAccessor {
     protected Session session;
 
-    public MailAccessor(String address, String password) throws ImapException {
+    public MailAccessor(String address, String password) throws MailException {
         this.session = getSession(address, password);
     }
 

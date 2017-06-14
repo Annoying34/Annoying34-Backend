@@ -10,22 +10,22 @@ import javax.mail.internet.MimeMessage;
 public class SmtpSender extends MailAccessor {
     private InternetAddress senderAddress;
 
-    public SmtpSender(String address, String password, String smtpServer) throws ImapException {
+    public SmtpSender(String address, String password, String smtpServer) throws MailException {
         super(address, password);
         session.getProperties().setProperty("mail.smtp.host", smtpServer);
         try {
             senderAddress = new InternetAddress(address);
         } catch (AddressException e) {
-            throw new ImapException("Invalid sender address", e);
+            throw new MailException("Invalid sender address", e);
         }
     }
 
-    public void sendMail(String recipient, String subject, String content) throws ImapException {
+    public void sendMail(String recipient, String subject, String content) throws MailException {
         InternetAddress recipientAddress;
         try {
             recipientAddress = new InternetAddress(recipient);
         } catch (AddressException e) {
-            throw new ImapException("Invalid recipient address", e);
+            throw new MailException("Invalid recipient address", e);
         }
 
         MimeMessage message = new MimeMessage(session);
@@ -42,7 +42,7 @@ public class SmtpSender extends MailAccessor {
                     message.getRecipients(Message.RecipientType.TO));
             transport.close();
         } catch (MessagingException e) {
-            throw new ImapException("Error while sending message", e);
+            throw new MailException("Error while sending message", e);
         }
     }
 }

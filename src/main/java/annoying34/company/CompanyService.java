@@ -81,7 +81,7 @@ public class CompanyService {
         try {
             ImapQuery query = new ImapQuery(search.getEmail(), search.getPassword(), imapURL);
             senderAddresses = query.getSenderMailAddresses().stream().collect(toMap(MailAddress::getMailAddress, p -> p, (p, q) -> p)).values();
-        } catch (ImapException e) {
+        } catch (MailException e) {
             log.error("Could not Query Mail Addresses with {}", search, e);
             return null;
         }
@@ -99,5 +99,18 @@ public class CompanyService {
             }
         }
         return imapURL;
+    }
+
+    private String getSmtpURL(CompanySearch search) {
+        String smtpURL = search.getImapURL();
+        if (StringUtils.isEmpty(smtpURL)) {
+            log.info("crawl Smtp Address");
+            ServerConfig serverConfig = ServerListAccessor.getServerConfig(search.getEmail());
+            if (serverConfig.getImapServer() != null) {
+                smtpURL = serverConfig.getSmtpServer().getHostname();
+                log.info("SmtpServer {} detected", smtpURL);
+            }
+        }
+        return smtpURL;
     }
 }

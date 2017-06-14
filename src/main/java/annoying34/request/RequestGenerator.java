@@ -1,4 +1,4 @@
-package annoy34.request;
+package annoying34.request;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -6,18 +6,18 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
-public class Request34 {
-	public static void main(String[] args) {
-		System.out.println(getRequestForInformation("Teetje Stark"));
-	}
-
-	public static String getRequestForInformation(String name) {
-		LocalDate inTwoWeeks = LocalDate.now().plusWeeks(2);
-		Date date = Date.from(inTwoWeeks.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		return getRequestForInformation(name, date);
+public class RequestGenerator {
+	public static String getRequestForInformationSubject() {
+		return "Auskunft über meine Daten";
 	}
 	
-	public static String getRequestForInformation(String name, Date requestDate) {
+	public static String getRequestForInformationBody(String name) {
+		LocalDate inTwoWeeks = LocalDate.now().plusWeeks(2);
+		Date date = Date.from(inTwoWeeks.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		return getRequestForInformationBody(name, date);
+	}
+
+	public static String getRequestForInformationBody(String name, Date requestDate) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Sehr geehrte Damen und Herren,\n\n"
 				+ "auf der Grundlage von §§ 34 Bundesdatenschutzgesetz (BDSG) "
@@ -36,7 +36,7 @@ public class Request34 {
 
 		return sb.toString();
 	}
-	
+
 	private static String dateToString(Date date) {
 		SimpleDateFormat sdtF = new SimpleDateFormat("EEEE dd.MM.yyyy", Locale.GERMANY);
 		return sdtF.format(date);

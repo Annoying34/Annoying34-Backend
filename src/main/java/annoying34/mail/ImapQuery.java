@@ -8,7 +8,7 @@ public class ImapQuery extends MailAccessor {
     private Store store;
     private FetchProfile fetchProfile;
 
-    public ImapQuery(String address, String password, String imapServer) throws ImapException {
+    public ImapQuery(String address, String password, String imapServer) throws MailException {
         super(address, password);
         store = getStore(address, password, imapServer);
         FetchProfile fp = new FetchProfile();
@@ -37,7 +37,7 @@ public class ImapQuery extends MailAccessor {
         for (Address address : adresses) {
             try {
                 mailAddresses.add(new MailAddress(address));
-            } catch (ImapException e) {
+            } catch (MailException e) {
                 // Mail address is invalid, don't add it
             }
         }
@@ -45,15 +45,15 @@ public class ImapQuery extends MailAccessor {
         return mailAddresses;
     }
 
-    private Store getStore(String address, String password, String imapServer) throws ImapException {
+    private Store getStore(String address, String password, String imapServer) throws MailException {
         try {
             store = session.getStore("imaps");
             store.connect(imapServer, address, password);
             return store;
         } catch (NoSuchProviderException | AuthenticationFailedException e) {
-            throw new ImapException(e.getMessage(), e);
+            throw new MailException(e.getMessage(), e);
         } catch (Exception e) {
-            throw new ImapException("Error while trying to connect to IMAP server", e);
+            throw new MailException("Error while trying to connect to IMAP server", e);
         }
     }
 
@@ -61,9 +61,9 @@ public class ImapQuery extends MailAccessor {
      * Return a {@link Set} of all domains appearing in all senders' email addresses
      *
      * @return A {@link Set} of domains
-     * @throws ImapException
+     * @throws MailException
      */
-    public Set<String> getSenderDomains() throws ImapException {
+    public Set<String> getSenderDomains() throws MailException {
         return getDomains(getSenderMailAddresses());
     }
 
@@ -71,9 +71,9 @@ public class ImapQuery extends MailAccessor {
      * Return a {@link Set} of all senders' {@link MailAddress}es
      *
      * @return A {@link Set} of {@link MailAddress} objects, representing valid email addresses
-     * @throws ImapException
+     * @throws MailException
      */
-    public Set<MailAddress> getSenderMailAddresses() throws ImapException {
+    public Set<MailAddress> getSenderMailAddresses() throws MailException {
         try {
             List<Address> addresses = new ArrayList<Address>();
 
@@ -89,7 +89,7 @@ public class ImapQuery extends MailAccessor {
 
             return convertAdressesToMailAddresses(addresses);
         } catch (MessagingException e) {
-            throw new ImapException("Error while trying to retrieve sender mail addresses", e);
+            throw new MailException("Error while trying to retrieve sender mail addresses", e);
         }
     }
 

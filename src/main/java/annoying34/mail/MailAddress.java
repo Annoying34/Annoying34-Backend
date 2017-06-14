@@ -9,7 +9,7 @@ public class MailAddress {
     private String domain;
     private String mail;
 
-    public MailAddress(String address) throws ImapException {
+    public MailAddress(String address) throws MailException {
         try {
             InternetAddress internetAddress = new InternetAddress(address);
             internetAddress.validate();
@@ -18,7 +18,7 @@ public class MailAddress {
 
             int splitIndex = mail.lastIndexOf("@");
             if (splitIndex == -1) { // Should not happen due to validation
-                throw new ImapException("Mail address is invalid");
+                throw new MailException("Mail address is invalid");
             }
 
             localPart = mail.substring(0, splitIndex);
@@ -26,11 +26,11 @@ public class MailAddress {
         } catch (AddressException e) {
             // Mail address is not valid
             // TODO discuss whether RFC822 is okay
-            throw new ImapException("Mail address is invalid", e);
+            throw new MailException("Mail address is invalid", e);
         }
     }
 
-    public MailAddress(Address address) throws ImapException {
+    public MailAddress(Address address) throws MailException {
         this(address.toString());
     }
 
