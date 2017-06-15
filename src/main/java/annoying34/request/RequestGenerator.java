@@ -26,7 +26,8 @@ public class RequestGenerator {
 				+ "deren Herkunft und den Zweck der Speicherung. "
 				+ "Sollten die zu meiner Person gespeicherten Daten an Dritte übermittelt worden sein, "
 				+ "bitte ich um Auskunft über die Empfänger mit Name und letztbekanner Anschrift.\n\n");
-		sb.append("Ich setze Ihnen zur Erfüllung meiner Forderungen eine Frist bis zum ");
+		sb.append("Bitte senden Sie mir die Daten an meine letzte Ihnen bekannte postalische Adresse. "
+				+ "Ich setze Ihnen zur Erfüllung meiner Forderungen eine Frist bis zum ");
 		sb.append(dateToString(requestDate) + ". ");
 		sb.append("Sollten Sie dieses Schreiben ignorieren, "
 				+ "werde ich mich an den zuständigen Landesdatenschutzbeauftragten wenden. "

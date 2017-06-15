@@ -11,6 +11,7 @@ import annoying34.mail.SmtpSender;
 import annoying34.request.RequestGenerator;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class CompaniesController {
@@ -43,16 +44,20 @@ public class CompaniesController {
                                       @RequestHeader(value = "smtppurl", defaultValue = "") String smtpURL,
                                       @RequestBody List<Company> companies) {
     	try {
-	        SmtpSender smtp = new SmtpSender(email, password, smtpURL);
-	        String subject = RequestGenerator.getRequestForInformationSubject();
-	        String message = RequestGenerator.getRequestForInformationBody(name);
-
-	        for (Company company : companies) {
-	            smtp.sendMail(company.getEmail(), subject, message); //TODO change to one mail with companies in BCC
-			}
+	        sendMail(name, email, password, smtpURL, companies);
     	} catch (MailException e) {
     		log.error(e);
     	}
     }
 
+    private void sendMail(String senderName, String senderMail, String senderPassword,
+    		String smtpURL, List<Company> companies) throws MailException {
+
+	        SmtpSender smtp = new SmtpSender(senderMail, senderPassword, smtpURL);
+	        String subject = RequestGenerator.getRequestForInformationSubject();
+	        String message = RequestGenerator.getRequestForInformationBody(senderName);
+	        List<String> addresses = companies.stream().map(c -> c.getEmail()).collect(Collectors.toList());
+
+	        smtp.sendMail(addresses, subject, message);
+    }
 }
