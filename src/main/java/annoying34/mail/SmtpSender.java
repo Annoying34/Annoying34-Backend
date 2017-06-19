@@ -3,15 +3,13 @@ package annoying34.mail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SmtpSender extends MailAccessor {
     private static final Logger log = LogManager.getLogger();
@@ -28,14 +26,14 @@ public class SmtpSender extends MailAccessor {
     }
 
     public void sendMail(List<String> recipients, String subject, String content) throws MailException {
-        List<InternetAddress> recipientAddresses = new ArrayList<InternetAddress>();
+        List<InternetAddress> recipientAddresses = new ArrayList<>();
         for (String recipient : recipients) {
-        	try {
+            try {
                 recipientAddresses.add(new InternetAddress(recipient));
             } catch (AddressException e) {
                 log.error("Invalid recipient address", e);
             }
-		}
+        }
 
         MimeMessage message = new MimeMessage(session);
         try {
@@ -48,7 +46,8 @@ public class SmtpSender extends MailAccessor {
             message.setSubject(subject);
             message.setText(content);
 
-            Transport.send(message);
+            //Transport.send(message);
+            log.error("Email: " + message);
         } catch (MessagingException e) {
             throw new MailException("Error while sending message", e);
         }

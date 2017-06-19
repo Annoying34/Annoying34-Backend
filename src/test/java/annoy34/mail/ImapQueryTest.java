@@ -1,8 +1,8 @@
 package annoy34.mail;
 
-import annoying34.mail.MailException;
 import annoying34.mail.ImapQuery;
 import annoying34.mail.MailAddress;
+import annoying34.mail.MailException;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -48,7 +48,7 @@ public class ImapQueryTest {
 
     @Test
     public void testDomainRetrieval() throws MailException {
-        Set<MailAddress> addresses = new HashSet<MailAddress>();
+        Set<MailAddress> addresses = new HashSet<>();
         addresses.add(new MailAddress("abc@def.ghi.jkl"));
         addresses.add(new MailAddress("abc@def.ghi"));
         addresses.add(new MailAddress("gurke@def.ghi.jkl"));

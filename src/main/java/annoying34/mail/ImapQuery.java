@@ -23,7 +23,7 @@ public class ImapQuery extends MailAccessor {
      * @return A {@link Set} of domains
      */
     public static Set<String> getDomains(Set<MailAddress> addresses) {
-        return addresses.stream().map(address -> address.getDomain()).collect(Collectors.toSet());
+        return addresses.stream().map(MailAddress::getDomain).collect(Collectors.toSet());
     }
 
     /**
@@ -33,7 +33,7 @@ public class ImapQuery extends MailAccessor {
      * @return A {@link Set} of {@link MailAddress} objects, representing valid email addresses
      */
     private static Set<MailAddress> convertAdressesToMailAddresses(List<Address> adresses) {
-        Set<MailAddress> mailAddresses = new HashSet<MailAddress>();
+        Set<MailAddress> mailAddresses = new HashSet<>();
         for (Address address : adresses) {
             try {
                 mailAddresses.add(new MailAddress(address));
@@ -75,7 +75,7 @@ public class ImapQuery extends MailAccessor {
      */
     public Set<MailAddress> getSenderMailAddresses() throws MailException {
         try {
-            List<Address> addresses = new ArrayList<Address>();
+            List<Address> addresses = new ArrayList<>();
 
             List<Folder> availableFolders = getToplevelFolders();
             for (Folder folder : availableFolders) {
@@ -94,7 +94,7 @@ public class ImapQuery extends MailAccessor {
     }
 
     private List<Folder> getToplevelFolders() throws MessagingException {
-        List<Folder> folders = new ArrayList<Folder>();
+        List<Folder> folders = new ArrayList<>();
         folders.addAll(Arrays.asList(store.getPersonalNamespaces()));
         folders.addAll(Arrays.asList(store.getSharedNamespaces()));
         folders.add(store.getFolder("INBOX"));
@@ -102,7 +102,7 @@ public class ImapQuery extends MailAccessor {
     }
 
     private List<Address> getSenderMailAddresses(Folder folder) throws MessagingException {
-        List<Address> fromAddresses = new ArrayList<Address>();
+        List<Address> fromAddresses = new ArrayList<>();
         folder.open(Folder.READ_ONLY);
         try {
             Message[] msgs = folder.getMessages();

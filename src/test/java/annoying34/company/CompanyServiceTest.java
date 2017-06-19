@@ -23,12 +23,12 @@ public class CompanyServiceTest {
     private TestEntityManager entityManager;
 
     @Autowired
-    private CompanyDao companyDao;
+    private CompanyRepository companyRepository;
     private CompanyService service;
 
     @Before
     public void setup() {
-        service = new CompanyService(companyDao);
+        service = new CompanyService(companyRepository);
     }
 
     @Test

@@ -1,18 +1,26 @@
 package annoying34.website;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.util.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class Spider {
 
     // bestimmte die Anzahl der zu crawlenden Seiten
-    private static final int MAX_PAGES_TO_SEARCH = 10;
+    private static final int MAX_PAGES_TO_SEARCH = 30;
+    Logger log = LogManager.getLogger();
     String someString;
-    private Set<String> pagesVisited = new HashSet<String>();
-    private List<String> pagesToVisit = new LinkedList<String>();
+    private Set<String> pagesVisited = new HashSet<>();
+    private List<String> pagesToVisit = new LinkedList<>();
 
     public CrawlerResult search(String url) throws IOException {
 
@@ -20,7 +28,7 @@ public class Spider {
             url = "http://" + url;
         }
 
-        LinkedList<String> emails = new LinkedList<String>();
+        LinkedList<String> emails = new LinkedList<>();
         String favIconURL = "";
 
         while (this.pagesVisited.size() < MAX_PAGES_TO_SEARCH) {
@@ -47,7 +55,7 @@ public class Spider {
                 emails.add(leg.searchFormail(someString));
             }
 
-            if (favIconURL == null || favIconURL == "") {
+            if (StringUtils.isEmpty(favIconURL)) {
                 favIconURL = leg.relativeFavIcon();
             }
 
@@ -57,6 +65,7 @@ public class Spider {
         }
 
         // TODO: This email might be wrong, we should add better logic to determine which is the support email address.
+        log.info(emails.toString());
         return new CrawlerResult(new URL(url).getHost(), emails.getFirst(), favIconURL);
     }
 

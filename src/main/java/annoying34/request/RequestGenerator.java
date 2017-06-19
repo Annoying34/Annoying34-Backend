@@ -18,24 +18,23 @@ public class RequestGenerator {
 	}
 
 	public static String getRequestForInformationBody(String name, Date requestDate) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Sehr geehrte Damen und Herren,\n\n"
+		String sb = ("Sehr geehrte Damen und Herren,\n\n"
 				+ "auf der Grundlage von §§ 34 Bundesdatenschutzgesetz (BDSG) "
 				+ "bitte ich unentgeltlich um folgende Auskunft:\n"
 				+ "Alle die über mich gespeicherten personenbezogenen Daten, "
 				+ "deren Herkunft und den Zweck der Speicherung. "
 				+ "Sollten die zu meiner Person gespeicherten Daten an Dritte übermittelt worden sein, "
-				+ "bitte ich um Auskunft über die Empfänger mit Name und letztbekanner Anschrift.\n\n");
-		sb.append("Bitte senden Sie mir die Daten an meine letzte Ihnen bekannte postalische Adresse. "
-				+ "Ich setze Ihnen zur Erfüllung meiner Forderungen eine Frist bis zum ");
-		sb.append(dateToString(requestDate) + ". ");
-		sb.append("Sollten Sie dieses Schreiben ignorieren, "
+				+ "bitte ich um Auskunft über die Empfänger mit Name und letztbekanner Anschrift.\n\n") +
+				"Bitte senden Sie mir die Daten an meine letzte Ihnen bekannte postalische Adresse. "
+				+ "Ich setze Ihnen zur Erfüllung meiner Forderungen eine Frist bis zum " +
+				dateToString(requestDate) + ". " +
+				"Sollten Sie dieses Schreiben ignorieren, "
 				+ "werde ich mich an den zuständigen Landesdatenschutzbeauftragten wenden. "
 				+ "Außerdem behalte ich mir weitere rechtliche Schritte vor.\n\n"
-				+ "Mit freundlichen Grüßen\n");
-		sb.append(name);
+				+ "Mit freundlichen Grüßen\n" +
+				name;
 
-		return sb.toString();
+		return sb;
 	}
 
 	private static String dateToString(Date date) {
