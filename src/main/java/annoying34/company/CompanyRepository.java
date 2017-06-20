@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-public interface CompanyDao extends CrudRepository<Company, Long>{
+public interface CompanyRepository extends CrudRepository<Company, Long> {
 
     List<Company> findAll();
 }

@@ -12,10 +12,7 @@ public class User {
     private long id;
 
     @Column
-    private String firstname;
-
-    @Column
-    private String lastname;
+    private String name;
 
     @Column
     private String token;
@@ -27,20 +24,12 @@ public class User {
         return id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getToken() {

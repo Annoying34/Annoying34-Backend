@@ -17,7 +17,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +43,7 @@ public class ServerListAccessor {
     private static String getPageContent(String domain) throws IOException {
         final URL queryUrl = new URL(SERVERLIST_BASE_URL + domain);
 
-        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_45);
-        try {
+        try (WebClient webClient = new WebClient(BrowserVersion.FIREFOX_45)) {
             XmlPage page = webClient.getPage(queryUrl); // Will be XML for a valid domain
             final String xmlPage = page.asXml();
             return xmlPage;
@@ -55,13 +53,11 @@ public class ServerListAccessor {
         } catch (SSLHandshakeException e) {
             // Java does not support sufficiently strong crypto to communicate with the ISP database
             log.error("Java still doesn't roll out strongest crypto by default", e);
-        } finally {
-            webClient.close();
         }
         return null;
     }
 
-    private static ServerConfig parseXML(String xml, String domain) throws ParserConfigurationException, UnsupportedEncodingException, IOException, SAXException {
+    private static ServerConfig parseXML(String xml, String domain) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(new ByteArrayInputStream(xml.getBytes("utf-8")));
@@ -80,7 +76,7 @@ public class ServerListAccessor {
 
 
     private static List<Server> getServerInformation(NodeList potentialServers, String protocol) {
-        List<Server> servers = new ArrayList<Server>();
+        List<Server> servers = new ArrayList<>();
 
         for (int i = 0; i < potentialServers.getLength(); i++) {
             Node potentialServer = potentialServers.item(i);
@@ -94,7 +90,7 @@ public class ServerListAccessor {
                     if (attribute.getNodeName().equals("hostname")) {
                         hostname = attribute.getTextContent().trim();
                     } else if (attribute.getNodeName().equals("port")) {
-                        port = new Integer(attribute.getTextContent().trim()).intValue();
+                        port = new Integer(attribute.getTextContent().trim());
                     } else if (attribute.getNodeName().equals("socketType")) {
                         socketType = attribute.getTextContent().trim();
                     }
