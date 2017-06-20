@@ -15,8 +15,8 @@ public class SpiderLeg {
 	// use a fake USER_AGENT so the web server thinks the robot is a
 	// normal web browser.
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
-	private List<String> links = new LinkedList<String>();
-	private Document htmlDocument;
+    private List<String> links = new LinkedList<>();
+    private Document htmlDocument;
 
 	/**
 	 * die Methode crawl vollzieht einen HTTP request, fragt die response ab und
@@ -55,7 +55,7 @@ public class SpiderLeg {
 		try{
 		 Element element = htmlDocument.head().select("link[href~=.*\\.(ico|png|svg)").first();
 		 return element.attr("abs:href");
-		 
+
 		}
 		catch(Exception e){
 			return null;
@@ -67,7 +67,7 @@ public class SpiderLeg {
 
 		Pattern pattern = Pattern
 				.compile("([_A-Za-z0-9-]+)(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})");
-		Pattern pattern2 = Pattern.compile("([\\w\\-]([\\.\\w])+[\\w]+	\\(at\\)([\\w\\-]+\\.)+[A-Za-z]{2,4})");
+        Pattern pattern2 = Pattern.compile("([\\w\\-]([.\\w])+[\\w]+	\\(at\\)([\\w\\-]+\\.)+[A-Za-z]{2,4})");
 
 		Matcher matchs = pattern.matcher(searchWord);
 		Matcher matchs2 = pattern2.matcher(searchWord);

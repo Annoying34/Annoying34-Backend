@@ -5,9 +5,9 @@ package annoying34.website;
  */
 public class CrawlerResult {
 
-    public String name;
-    public String email;
-    public String favicon;
+    public final String name;
+    public final String email;
+    public final String favicon;
 
     CrawlerResult(String name, String email, String favicon) {
         this.name = name;
