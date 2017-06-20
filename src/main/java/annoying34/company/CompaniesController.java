@@ -30,7 +30,7 @@ public class CompaniesController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/companies")
+    @GetMapping(value = "/companies")
     public ResponseEntity<List<Company>> getCompanies(@RequestHeader(value = "email", defaultValue = "") String email,
                                                       @RequestHeader(value = "password", defaultValue = "") String password,
                                                       @RequestHeader(value = "imapurl", defaultValue = "") String imapURL,
@@ -73,5 +73,16 @@ public class CompaniesController {
         userRepository.save(user);
 
         return new ResponseEntity(token, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/companies", consumes = "application/json")
+    public ResponseEntity<String> put(@RequestBody Company company) {
+        if (company == null) {
+            return new ResponseEntity<>("no company transmitted", HttpStatus.BAD_REQUEST);
+        } else {
+            companyService.put(company);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
     }
 }

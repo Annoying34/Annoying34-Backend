@@ -71,6 +71,10 @@ public class CompanyService {
         return resultList;
     }
 
+    public void put(Company company) {
+        companyRepository.save(company);
+    }
+
     private List<Company> loadMapFromDBAndCheckFoundDomains(Map<String, MailAddress> domainMap) {
         List<Company> companyList = companyRepository.findAll();
         companyList.stream().filter(x -> domainMap.containsKey(x.getDomain())).forEach(e -> e.setSelected(true));
