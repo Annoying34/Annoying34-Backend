@@ -54,15 +54,12 @@ public class SpiderLeg {
 	public String relativeFavIcon() {
 		try{
 		 Element element = htmlDocument.head().select("link[href~=.*\\.(ico|png|svg)").first();
-		 System.out.println(element.attr("abs:href"));
 		 return element.attr("abs:href");
 		 
 		}
 		catch(Exception e){
-			System.out.println("");
 			return null;
 		}
-		
 	}
 
 	// sucht nach Email-Adressen mithilfe von regulären Ausdrücken
@@ -76,8 +73,6 @@ public class SpiderLeg {
 		Matcher matchs2 = pattern2.matcher(searchWord);
 
 		if (matchs.find() || matchs2.find()) {
-
-			System.out.println(searchWord.substring(matchs.start(), matchs.end()));
 			return searchWord.substring(matchs.start(), matchs.end());
 
 		}
