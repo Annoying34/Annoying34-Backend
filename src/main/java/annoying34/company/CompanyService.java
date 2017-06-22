@@ -18,12 +18,17 @@ import java.util.Map;
 public class CompanyService {
     private static final Logger log = LogManager.getLogger();
 
-    private final CompanyRepository companyRepository;
-    private MailService mailService = new MailService();
+    private CompanyRepository companyRepository;
+    private MailService mailService;
 
     @Autowired
-    public CompanyService(CompanyRepository companyRepository) {
+    public void setCompanyRepository(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
+    }
+
+    @Autowired
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
     }
 
     public List<Company> getCompanies() {
@@ -76,7 +81,7 @@ public class CompanyService {
     }
 
     private List<Company> loadMapFromDBAndCheckFoundDomains(Map<String, MailAddress> domainMap) {
-        List<Company> companyList = companyRepository.findAll();
+        List<Company> companyList = getCompanies();
         companyList.stream().filter(x -> domainMap.containsKey(x.getDomain())).forEach(e -> e.setSelected(true));
         return companyList;
     }

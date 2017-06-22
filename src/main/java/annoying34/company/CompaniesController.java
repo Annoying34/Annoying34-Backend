@@ -1,7 +1,6 @@
 package annoying34.company;
 
 import annoying34.communication.User;
-import annoying34.communication.UserRepository;
 import annoying34.communication.UserService;
 import annoying34.mail.MailException;
 import annoying34.mail.MailService;
@@ -20,15 +19,9 @@ import java.util.List;
 public class CompaniesController {
 
     private static final Logger log = LogManager.getLogger();
-    private final CompanyService companyService;
-    private final MailService mailService = new MailService();
-    private final UserRepository userRepository;
-
-    @Autowired
-    public CompaniesController(CompanyService companyService, UserRepository userRepository) {
-        this.companyService = companyService;
-        this.userRepository = userRepository;
-    }
+    private CompanyService companyService;
+    private UserService userService;
+    private MailService mailService;
 
     @GetMapping(value = "/companies")
     public ResponseEntity<List<Company>> getCompanies(@RequestHeader(value = "email", defaultValue = "") String email,
@@ -54,25 +47,20 @@ public class CompaniesController {
     }
 
     @PostMapping(value = "/companies", consumes = "application/json")
-    public ResponseEntity<String> createMailsFromCompanyList(@RequestHeader(value = "name", defaultValue = "") String name,
-                                                             @RequestHeader(value = "email", defaultValue = "") String email,
-                                                             @RequestHeader(value = "password", defaultValue = "") String password,
-                                                             @RequestHeader(value = "smtpUrl", defaultValue = "") String smtpURL,
-                                                             @RequestBody List<Company> companies) {
+    public ResponseEntity<String> prepareMailsForUser(@RequestHeader(value = "name", defaultValue = "") String name,
+                                                      @RequestHeader(value = "email", defaultValue = "") String email,
+                                                      @RequestHeader(value = "password", defaultValue = "") String password,
+                                                      @RequestHeader(value = "smtpUrl", defaultValue = "") String smtpURL,
+                                                      @RequestBody List<Company> companies) {
         try {
             mailService.sendMail(name, email, password, smtpURL, companies);
         } catch (MailException e) {
-            log.error(e);
-            return new ResponseEntity<>("mails could not bei created and send", HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("could not send mail", e);
+            return new ResponseEntity<>("unable to create or send mails", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        User user = new User();
-        user.setEmail(email);
-        user.setName(name);
-        String token = UserService.generateToken(user);
-        userRepository.save(user);
-
-        return new ResponseEntity(token, HttpStatus.OK);
+        User user = userService.saveUser(name, email);
+        return new ResponseEntity(user.getToken(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/companies", consumes = "application/json")
@@ -83,6 +71,20 @@ public class CompaniesController {
             companyService.put(company);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
 
+    @Autowired
+    public void setCompanyService(CompanyService companyService) {
+        this.companyService = companyService;
+    }
+
+    @Autowired
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }
