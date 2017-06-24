@@ -2,6 +2,7 @@ package annoying34.website;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 
+@Component
 public class Spider {
 
     // bestimmte die Anzahl der zu crawlenden Seiten

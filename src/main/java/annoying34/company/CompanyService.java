@@ -20,6 +20,12 @@ public class CompanyService {
 
     private CompanyRepository companyRepository;
     private MailService mailService;
+    private Spider webcrawler;
+
+    @Autowired
+    public void setWebcrawler(Spider webcrawler) {
+        this.webcrawler = webcrawler;
+    }
 
     @Autowired
     public void setCompanyRepository(CompanyRepository companyRepository) {
@@ -56,15 +62,15 @@ public class CompanyService {
 
     private List<Company> crawlNewCompanies(Map<String, MailAddress> domainMap) {
         List<Company> resultList = new ArrayList<>();
-        Spider crawler = new Spider();
         for (String domain : domainMap.keySet()) {
             try {
-                CrawlerResult result = crawler.search(domain);
+                CrawlerResult result = webcrawler.search(domain);
 
-                if (StringUtils.isEmpty(result.email)) {
+                if (!StringUtils.isEmpty(result.email)) {
                     Company company = new Company(result.name, result.email, result.favicon, domain, true);
                     companyRepository.save(company);
                     log.info("New Company({}) saved.", company);
+                    resultList.add(company);
                 } else {
                     log.error("Crawler does not found emails");
                 }
