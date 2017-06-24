@@ -1,8 +1,11 @@
 package annoying34.communication;
 
+import annoying34.company.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -17,11 +20,12 @@ public class UserService {
         return token;
     }
 
-    public User saveUser(String name, String email) {
+    public User saveUser(String name, String email, List<Company> companyList) {
         User user = new User();
         user.setEmail(email);
         user.setName(name);
-        String token = UserService.generateToken(user);
+        user.setCompanies(companyList);
+        UserService.generateToken(user);
         repository.save(user);
 
         return user;

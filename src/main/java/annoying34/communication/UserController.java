@@ -1,6 +1,8 @@
 package annoying34.communication;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,15 +18,13 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-
     @RequestMapping(method = RequestMethod.GET, value = "/user")
-    public String revisit(@RequestParam(value="token") String token) {
+    public ResponseEntity<User> revisit(@RequestParam(value = "token") String token) {
         User user = userRepository.findByToken(token);
-
         if(user == null) {
-            return "";
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
-            return user.getName();
+            return new ResponseEntity(user, HttpStatus.OK);
         }
     }
 }

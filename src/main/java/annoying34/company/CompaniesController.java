@@ -52,6 +52,7 @@ public class CompaniesController {
                                                       @RequestHeader(value = "password", defaultValue = "") String password,
                                                       @RequestHeader(value = "smtpUrl", defaultValue = "") String smtpURL,
                                                       @RequestBody List<Company> companies) {
+
         try {
             mailService.sendMail(name, email, password, smtpURL, companies);
         } catch (MailException e) {
@@ -59,7 +60,8 @@ public class CompaniesController {
             return new ResponseEntity<>("unable to create or send mails", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        User user = userService.saveUser(name, email);
+
+        User user = userService.saveUser(name, email, companies);
         return new ResponseEntity(user.getToken(), HttpStatus.OK);
     }
 

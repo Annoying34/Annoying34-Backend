@@ -1,7 +1,10 @@
 package annoying34.communication;
 
 
+import annoying34.company.Company;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -19,6 +22,9 @@ public class User {
 
     @Column(nullable = false)
     private String email;
+
+    @ManyToMany(targetEntity = Company.class, cascade = {CascadeType.ALL})
+    private List<Company> companies;
 
     public long getId() {
         return id;
@@ -46,5 +52,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Company> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(List<Company> companies) {
+        this.companies = companies;
     }
 }
