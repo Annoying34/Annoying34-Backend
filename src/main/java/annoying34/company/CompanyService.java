@@ -18,12 +18,23 @@ import java.util.Map;
 public class CompanyService {
     private static final Logger log = LogManager.getLogger();
 
-    private final CompanyRepository companyRepository;
-    private MailService mailService = new MailService();
+    private CompanyRepository companyRepository;
+    private MailService mailService;
+    private Spider webcrawler;
 
     @Autowired
-    public CompanyService(CompanyRepository companyRepository) {
+    public void setWebcrawler(Spider webcrawler) {
+        this.webcrawler = webcrawler;
+    }
+
+    @Autowired
+    public void setCompanyRepository(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
+    }
+
+    @Autowired
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
     }
 
     public List<Company> getCompanies() {
@@ -51,15 +62,15 @@ public class CompanyService {
 
     private List<Company> crawlNewCompanies(Map<String, MailAddress> domainMap) {
         List<Company> resultList = new ArrayList<>();
-        Spider crawler = new Spider();
         for (String domain : domainMap.keySet()) {
             try {
-                CrawlerResult result = crawler.search(domain);
+                CrawlerResult result = webcrawler.search(domain);
 
-                if (StringUtils.isEmpty(result.email)) {
+                if (!StringUtils.isEmpty(result.email)) {
                     Company company = new Company(result.name, result.email, result.favicon, domain, true);
                     companyRepository.save(company);
                     log.info("New Company({}) saved.", company);
+                    resultList.add(company);
                 } else {
                     log.error("Crawler does not found emails");
                 }
@@ -71,8 +82,12 @@ public class CompanyService {
         return resultList;
     }
 
+    public void put(Company company) {
+        companyRepository.save(company);
+    }
+
     private List<Company> loadMapFromDBAndCheckFoundDomains(Map<String, MailAddress> domainMap) {
-        List<Company> companyList = companyRepository.findAll();
+        List<Company> companyList = getCompanies();
         companyList.stream().filter(x -> domainMap.containsKey(x.getDomain())).forEach(e -> e.setSelected(true));
         return companyList;
     }

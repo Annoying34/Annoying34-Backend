@@ -1,6 +1,9 @@
 package annoying34.company;
 
+import annoying34.communication.User;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "company")
@@ -24,6 +27,9 @@ public class Company {
 
     @Transient
     private boolean selected = false;
+
+    @ManyToMany(targetEntity = User.class, cascade = {CascadeType.ALL})
+    private List<User> users;
 
     public Company(String name, String email, String imageURL, String domain, boolean selected) {
         this.name = name;

@@ -1,128 +1,127 @@
 package annoying34.website;
 
-import sun.security.provider.ConfigFile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 
+@Component
 public class Spider {
 
-	// bestimmte die Anzahl der zu crawlenden Seiten
-	private static final int MAX_PAGES_TO_SEARCH = 100;
-	String someString;
-	String highPrioEmail;
-	private Set<String> pagesVisited = new HashSet<String>();
-	private List<String> pagesToVisit = new LinkedList<String>();
+    // bestimmte die Anzahl der zu crawlenden Seiten
+    private static final int MAX_PAGES_TO_SEARCH = 100;
+    Logger log = LogManager.getLogger();
+    private String someString;
+    private String highPrioEmail;
+    private Set<String> pagesVisited = new HashSet<>();
+    private List<String> pagesToVisit = new LinkedList<>();
 
-	public CrawlerResult search(String url) throws IOException, FileNotFoundException {
+    private static boolean isPrio(String context) {
+        String[] prioList = {"service", "info", "feedback", "mail", "hilfe", "impressum", "datenschutz"};
 
-		if (!url.startsWith("http://") && !url.startsWith("https://")) {
-			url = "http://" + url;
-		}
+        for (String keyword : prioList) {
+            if (context.toLowerCase().contains(keyword.toLowerCase())) {
+                return true;
+            }
+        }
 
-		// URL u = new URL(url);
-		// URLConnection uc = u.openConnection();
+        return false;
+    }
 
-		LinkedList<String> emails = new LinkedList<String>();
-		String favIconURL = "";
+    public CrawlerResult search(String url) throws IOException {
 
-		try {
-			while (this.pagesToVisit.isEmpty() == false && this.pagesVisited.size() < MAX_PAGES_TO_SEARCH && highPrioEmail == null) {
-				String currentUrl;
-				SpiderLeg leg = new SpiderLeg();
-				if (this.pagesToVisit.isEmpty()) {
-					currentUrl = url;
-					this.pagesVisited.add(url);
-				} else {
-					currentUrl = this.nextUrl();
-				}
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
 
-				if (currentUrl == null) {
-					break;
-				}
+        // URL u = new URL(url);
+        // URLConnection uc = u.openConnection();
 
-				leg.crawl(currentUrl); // rufe crawl in SpiderLeg auf
+        LinkedList<String> emails = new LinkedList<>();
+        String favIconURL = "";
 
-				URL urlbuffer = new URL(currentUrl);
+        try {
+            while (this.pagesToVisit.isEmpty() == false && this.pagesVisited.size() < MAX_PAGES_TO_SEARCH && highPrioEmail == null) {
+                String currentUrl;
+                SpiderLeg leg = new SpiderLeg();
+                if (this.pagesToVisit.isEmpty()) {
+                    currentUrl = url;
+                    this.pagesVisited.add(url);
+                } else {
+                    currentUrl = this.nextUrl();
+                }
 
-				BufferedReader bufferreader = new BufferedReader(new InputStreamReader(urlbuffer.openStream()));
+                if (currentUrl == null) {
+                    break;
+                }
 
-				while ((someString = bufferreader.readLine()) != null) {
-					String email = leg.searchFormail(someString);
-					if (email != null) {
-						emails.add(email);
+                leg.crawl(currentUrl); // rufe crawl in SpiderLeg auf
 
-						if (Spider.isPrio(email)) {
-							highPrioEmail = email;
-						}
-					}
-				}
-				
-				if (favIconURL == null || favIconURL == "") {
-					favIconURL = leg.relativeFavIcon();
-				}
+                URL urlbuffer = new URL(currentUrl);
 
-				bufferreader.close();
+                BufferedReader bufferreader = new BufferedReader(new InputStreamReader(urlbuffer.openStream()));
 
-				this.pagesToVisit.addAll(leg.getLinks());
-				
-			}
-		} // try
-		catch (Exception e) {
+                while ((someString = bufferreader.readLine()) != null) {
+                    String email = leg.searchFormail(someString);
+                    if (email != null) {
+                        emails.add(email);
 
-		}
-		// TODO: This email might be wrong, we should add better logic to
-		// determine which is the support email address.
-		
-		String email = ((emails.size() == 0) ? null : emails.getFirst());
+                        if (Spider.isPrio(email)) {
+                            highPrioEmail = email;
+                        }
+                    }
+                }
 
-		if (highPrioEmail != null) {
-			email = highPrioEmail;
-		}
-		
-		return new CrawlerResult(new URL(url).getHost(), email, favIconURL);
+                if (favIconURL == null || Objects.equals(favIconURL, "")) {
+                    favIconURL = leg.relativeFavIcon();
+                }
 
-	}
+                bufferreader.close();
 
-	/**
-	 * Returnt die nächste URL, die man besuchen möchte. Außerdem stellen wir
-	 * sicher dass keine URL mehrmals besucht wird.
-	 */
-	private String nextUrl() {
-		String nextUrl;
+                this.pagesToVisit.addAll(leg.getLinks());
 
-		do {
-			nextUrl = this.pagesToVisit.remove(0);
-		} while (this.pagesVisited.contains(nextUrl));
+            }
+        } // try
+        catch (Exception e) {
+            log.error("", e);
+        }
+        // TODO: This email might be wrong, we should add better logic to
+        // determine which is the support email address.
 
-		this.pagesToVisit.sort(new Comparator<String>() {
+        String email = ((emails.size() == 0) ? null : emails.getFirst());
 
-			@Override
-			public int compare(String o1, String o2) {
-				Integer isO1Prio = (Spider.isPrio(o1) ? 1 : 0);
-				Integer isO2Prio = (Spider.isPrio(o2) ? 1 : 0);
+        if (highPrioEmail != null) {
+            email = highPrioEmail;
+        }
 
-				return isO2Prio.compareTo(isO1Prio);
-			}
-		});
+        return new CrawlerResult(new URL(url).getHost(), email, favIconURL);
 
-		this.pagesVisited.add(nextUrl);
-		return nextUrl;
-	}
-	
-	private static boolean isPrio(String context) {
-		String[] prioList = {"service", "info", "feedback", "mail", "hilfe", "impressum", "datenschutz"};
+    }
 
-		for (String keyword:prioList) {
-			if (context.toLowerCase().contains(keyword.toLowerCase())) {
-				return true;
-			}
-		}
+    /**
+     * Returnt die nächste URL, die man besuchen möchte. Außerdem stellen wir
+     * sicher dass keine URL mehrmals besucht wird.
+     */
+    private String nextUrl() {
+        String nextUrl;
 
-		return false;
-	}
+        do {
+            nextUrl = this.pagesToVisit.remove(0);
+        } while (this.pagesVisited.contains(nextUrl));
+
+        this.pagesToVisit.sort((o1, o2) -> {
+            Integer isO1Prio = (Spider.isPrio(o1) ? 1 : 0);
+            Integer isO2Prio = (Spider.isPrio(o2) ? 1 : 0);
+
+            return isO2Prio.compareTo(isO1Prio);
+        });
+
+        this.pagesVisited.add(nextUrl);
+        return nextUrl;
+    }
 }

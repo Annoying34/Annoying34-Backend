@@ -6,6 +6,7 @@ import annoying34.company.CompanySearch;
 import annoying34.request.RequestGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
 
+@Service
 public class MailService {
 
     Logger log = LogManager.getLogger();
