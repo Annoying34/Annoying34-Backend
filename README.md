@@ -1,7 +1,7 @@
 # Annoying 34 Backend
 ____
 
-## Server - Setup
+## Backend - Setup
 
 #### MySQL
 
