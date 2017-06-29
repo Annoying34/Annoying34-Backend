@@ -10,8 +10,6 @@ $ mkdir -p /storage/docker/mysql-datadir
 $ docker run -d --name=annoying34-mysql --env="MYSQL_ROOT_PASSWORD=FuerNervigeMailsBrauchtManEineDatenbank" -p 3306:3306 --volume=/storage/docker/mysql-datadir:/var/lib/mysql mysql
 ```
 
-___
-
 #### Server
 
 ```
