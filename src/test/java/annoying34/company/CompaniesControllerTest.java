@@ -128,6 +128,7 @@ public class CompaniesControllerTest {
     public void error_IfPostCouldNotSendMails() throws Exception {
         doThrow(new MailException("")).when(mailService).sendMail(any(), any(), any(), any(), any());
         this.mvc.perform(post("/companies")
+                .header("password", "secure")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("[]"))

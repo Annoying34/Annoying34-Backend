@@ -51,7 +51,9 @@ public class CompaniesController {
                                                       @RequestHeader(value = "email", defaultValue = "") String email,
                                                       @RequestHeader(value = "password", defaultValue = "") String password,
                                                       @RequestHeader(value = "smtpUrl", defaultValue = "") String smtpURL,
-                                                      @RequestBody List<Company> companies) {
+                                                      @RequestBody List<Long> companyIds) {
+
+        List<Company> companies = companyService.getCompanysByID(companyIds);
 
         if (!StringUtils.isEmpty(password)) {
             //send mails, if password was given
