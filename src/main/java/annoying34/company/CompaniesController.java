@@ -53,13 +53,15 @@ public class CompaniesController {
                                                       @RequestHeader(value = "smtpUrl", defaultValue = "") String smtpURL,
                                                       @RequestBody List<Company> companies) {
 
-        try {
-            mailService.sendMail(name, email, password, smtpURL, companies);
-        } catch (MailException e) {
-            log.error("could not send mail", e);
-            return new ResponseEntity<>("unable to create or send mails", HttpStatus.INTERNAL_SERVER_ERROR);
+        if (!StringUtils.isEmpty(password)) {
+            //send mails, if password was given
+            try {
+                mailService.sendMail(name, email, password, smtpURL, companies);
+            } catch (MailException e) {
+                log.error("could not send mail", e);
+                return new ResponseEntity<>("unable to create or send mails", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
-
 
         User user = userService.saveUser(name, email, companies);
         return new ResponseEntity(user.getToken(), HttpStatus.OK);
