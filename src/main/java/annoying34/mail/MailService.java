@@ -50,7 +50,13 @@ public class MailService {
             log.error("Could not Query Mail Addresses with {}", search, e);
             return new HashMap<>();
         }
-        return senderAddresses.stream().collect(toMap(MailAddress::getDomain, x -> x));
+
+        Map<String, MailAddress> map = new HashMap<>();
+        for (MailAddress mailAddress : senderAddresses) {
+            map.put(mailAddress.getDomain(), mailAddress);
+        }
+
+        return map;
     }
 
 
