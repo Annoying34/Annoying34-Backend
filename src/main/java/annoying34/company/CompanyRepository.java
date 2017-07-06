@@ -9,4 +9,6 @@ import java.util.List;
 public interface CompanyRepository extends CrudRepository<Company, Long> {
 
     List<Company> findAll();
+
+    List<Company> findByIdIn(List<Long> ids);
 }

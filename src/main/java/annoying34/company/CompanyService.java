@@ -43,6 +43,10 @@ public class CompanyService {
         return companyList;
     }
 
+    public List<Company> getCompanysByID(List<Long> ids) {
+        return companyRepository.findByIdIn(ids);
+    }
+
     public List<Company> getCompanies(CompanySearch search) {
         String imapURL = mailService.getImapURL(search);
         Map<String, MailAddress> domainMap = mailService.getMailAddressMap(search, imapURL);
