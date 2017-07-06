@@ -68,7 +68,6 @@ public class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
-    	System.out.println(response.getContentAsString());
     	
     	ObjectMapper objectMapper = new ObjectMapper();
     	Map<String, Object> result = objectMapper.readValue(response.getContentAsString(), new TypeReference<Map<String, Object>>() {
