@@ -76,7 +76,7 @@ public class CompanyService {
                     log.info("New Company({}) saved.", company);
                     resultList.add(company);
                 } else {
-                    log.error("Crawler does not found emails");
+                    log.error("Crawler does not found emails for domain {}", domain);
                 }
 
             } catch (Exception e) {
