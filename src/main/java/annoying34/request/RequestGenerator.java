@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class RequestGenerator {
 	public static String getRequestForInformationSubject() {
-		return "Auskunft über meine Daten";
+		return "Auskunft Ã¼ber meine Daten";
 	}
 	
 	public static String getRequestForInformationBody(String name) {
@@ -19,19 +19,19 @@ public class RequestGenerator {
 
 	public static String getRequestForInformationBody(String name, Date requestDate) {
 		String sb = ("Sehr geehrte Damen und Herren,\n\n"
-				+ "auf der Grundlage von §§ 34 Bundesdatenschutzgesetz (BDSG) "
+				+ "auf der Grundlage von Â§Â§ 34 Bundesdatenschutzgesetz (BDSG) "
 				+ "bitte ich unentgeltlich um folgende Auskunft:\n"
-				+ "Alle die über mich gespeicherten personenbezogenen Daten, "
+				+ "Alle die Ã¼ber mich gespeicherten personenbezogenen Daten, "
 				+ "deren Herkunft und den Zweck der Speicherung. "
-				+ "Sollten die zu meiner Person gespeicherten Daten an Dritte übermittelt worden sein, "
-				+ "bitte ich um Auskunft über die Empfänger mit Name und letztbekanner Anschrift.\n\n") +
+				+ "Sollten die zu meiner Person gespeicherten Daten an Dritte Ã¼bermittelt worden sein, "
+				+ "bitte ich um Auskunft Ã¼ber die EmpfÃ¤nger mit Name und letztbekanner Anschrift.\n\n") +
 				"Bitte senden Sie mir die Daten an meine letzte Ihnen bekannte postalische Adresse. "
-				+ "Ich setze Ihnen zur Erfüllung meiner Forderungen eine Frist bis zum " +
+				+ "Ich setze Ihnen zur ErfÃ¼llung meiner Forderungen eine Frist bis zum " +
 				dateToString(requestDate) + ". " +
 				"Sollten Sie dieses Schreiben ignorieren, "
-				+ "werde ich mich an den zuständigen Landesdatenschutzbeauftragten wenden. "
-				+ "Außerdem behalte ich mir weitere rechtliche Schritte vor.\n\n"
-				+ "Mit freundlichen Grüßen\n" +
+				+ "werde ich mich an den zustÃ¤ndigen Landesdatenschutzbeauftragten wenden. "
+				+ "AuÃŸerdem behalte ich mir weitere rechtliche Schritte vor.\n\n"
+				+ "Mit freundlichen GrÃ¼ÃŸen\n" +
 				name;
 
 		return sb;

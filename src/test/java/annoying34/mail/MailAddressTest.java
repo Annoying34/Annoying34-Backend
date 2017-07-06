@@ -1,4 +1,4 @@
-package annoy34.mail;
+package annoying34.mail;
 
 import annoying34.mail.MailException;
 import annoying34.mail.MailAddress;
