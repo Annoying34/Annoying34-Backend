@@ -20,12 +20,6 @@ public class CompanyService {
 
     private CompanyRepository companyRepository;
     private MailService mailService;
-    private Spider webcrawler;
-
-    @Autowired
-    public void setWebcrawler(Spider webcrawler) {
-        this.webcrawler = webcrawler;
-    }
 
     @Autowired
     public void setCompanyRepository(CompanyRepository companyRepository) {
@@ -68,6 +62,7 @@ public class CompanyService {
         List<Company> resultList = new ArrayList<>();
         for (String domain : domainMap.keySet()) {
             try {
+            	Spider webcrawler = new Spider();
                 CrawlerResult result = webcrawler.search(domain);
 
                 if (!StringUtils.isEmpty(result.email)) {
