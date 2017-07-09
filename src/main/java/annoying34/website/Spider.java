@@ -26,6 +26,7 @@ public class Spider {
 		String highPrioEmail = null;
 
 		url = prependProtocolIfNeccessary(url);
+		pagesToVisit.add(url);
 
 		try {
 			while (pagesVisited.size() < MAX_PAGES_TO_SEARCH && highPrioEmail == null) {
@@ -33,8 +34,7 @@ public class Spider {
 				String line;
 				SpiderLeg leg = new SpiderLeg();
 				if (pagesToVisit.isEmpty()) {
-					currentUrl = url;
-					pagesVisited.add(url);
+					break;
 				} else {
 					currentUrl = getNextUrl();
 					pagesVisited.add(currentUrl);
@@ -42,7 +42,6 @@ public class Spider {
 				if (currentUrl == null) {
 					break;
 				}
-
 				leg.crawl(currentUrl);
 				pagesToVisit.addAll(leg.getLinks());
 
@@ -83,14 +82,14 @@ public class Spider {
 	}
 
 	/**
-	 * Returnt die nächste URL, die man besuchen möchte. Außerdem stellen wir
-	 * sicher dass keine URL mehrmals besucht wird.
+	 * Gibt die nächste, unbesuchte URL zurück.
 	 */
 	private String getNextUrl() {
-		String nextUrl;
-		do {
-			nextUrl = pagesToVisit.remove(0);
-		} while (pagesVisited.contains(nextUrl));
+		pagesToVisit.removeAll(pagesVisited);
+		if (pagesToVisit.isEmpty()) {
+			return null;
+		}
+		String nextUrl = pagesToVisit.remove(0);
 
 		pagesToVisit.sort(new Comparator<String>() {
 			@Override

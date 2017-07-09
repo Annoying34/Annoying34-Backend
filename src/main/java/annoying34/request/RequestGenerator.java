@@ -19,7 +19,7 @@ public class RequestGenerator {
 
 	public static String getRequestForInformationBody(String name, Date requestDate) {
 		String sb = ("Sehr geehrte Damen und Herren,\n\n"
-				+ "auf der Grundlage von §§ 34 Bundesdatenschutzgesetz (BDSG) "
+				+ "auf der Grundlage von § 34 Bundesdatenschutzgesetz (BDSG) "
 				+ "bitte ich unentgeltlich um folgende Auskunft:\n"
 				+ "Alle die über mich gespeicherten personenbezogenen Daten, "
 				+ "deren Herkunft und den Zweck der Speicherung. "
