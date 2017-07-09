@@ -99,8 +99,8 @@ public class CompaniesControllerTest {
         Map<String, MailAddress> map = new HashMap<>();
         map.put("test.bar", new MailAddress(s.getEmail()));
         when(mailService.getMailAddressMap(any(), any())).thenReturn(map);
-        when(spider.search("test.bar")).thenReturn(new CrawlerResult("test", "info@test.bar", "favIcon"));
         addDemoCompanyInDB();
+        addDemoCompany2InDB();
         MockHttpServletResponse response = this.mvc.perform(get("/companies")
                 .accept(MediaType.APPLICATION_JSON)
                 .header("email", s.getEmail())
@@ -179,6 +179,11 @@ public class CompaniesControllerTest {
 
     private void addDemoCompanyInDB() {
         Company company = new Company("TestCompany", "test@testcompany.com", "url.testcompany.com/icon.ico", "testcompany.com", false);
+        companyRepository.save(company);
+    }
+    
+    private void addDemoCompany2InDB() {
+    	Company company = new Company("test", "info@test.bar", "favIcon", "test.bar", false);
         companyRepository.save(company);
     }
 }
