@@ -58,7 +58,6 @@ public class CompaniesControllerTest {
         CompanyService companyService = new CompanyService();
         companyService.setCompanyRepository(companyRepository);
         companyService.setMailService(mailService);
-        companyService.setWebcrawler(spider);
 
         UserService userService = new UserService();
         userService.setRepository(userRepository);
