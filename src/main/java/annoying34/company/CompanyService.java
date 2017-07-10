@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CompanyService {
@@ -61,25 +62,35 @@ public class CompanyService {
     private List<Company> crawlNewCompanies(Map<String, MailAddress> domainMap) {
         List<Company> resultList = new ArrayList<>();
         for (String domain : domainMap.keySet()) {
-            try {
-            	Spider webcrawler = new Spider();
-                CrawlerResult result = webcrawler.search(domain);
-
-                if (!StringUtils.isEmpty(result.email)) {
-                    Company company = new Company(result.name, result.email, result.favicon, domain, true);
-                    companyRepository.save(company);
-                    log.info("New Company({}) saved.", company);
-                    resultList.add(company);
-                } else {
-                    log.error("Crawler did not find emails for domain {}", domain);
-                }
-
-            } catch (Exception e) {
-                log.error("URL {} could not be parsed", domain, e);
+            Optional<Company> foundCompany = crawlCompany(domain);
+            if (foundCompany.isPresent()) {
+                resultList.add(foundCompany.get());
             }
         }
         return resultList;
     }
+
+    public Optional<Company> crawlCompany(String domain) {
+        Optional<Company> foundCompany = Optional.empty();
+        try {
+            Spider webcrawler = new Spider();
+            CrawlerResult result = webcrawler.search(domain);
+
+            if (!StringUtils.isEmpty(result.email)) {
+                Company company = new Company(result.name, result.email, result.favicon, domain, true);
+                companyRepository.save(company);
+                log.info("New Company({}) saved.", company);
+                foundCompany = Optional.of(company);
+            } else {
+                log.error("Crawler did not find emails for domain {}", domain);
+            }
+
+        } catch (Exception e) {
+            log.error("URL {} could not be parsed", domain, e);
+        }
+        return foundCompany;
+    }
+
 
     public void put(Company company) {
         companyRepository.save(company);
