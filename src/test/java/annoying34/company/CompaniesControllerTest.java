@@ -6,7 +6,6 @@ import annoying34.communication.UserService;
 import annoying34.mail.MailAddress;
 import annoying34.mail.MailException;
 import annoying34.mail.MailService;
-import annoying34.website.CrawlerResult;
 import annoying34.website.Spider;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -131,7 +130,7 @@ public class CompaniesControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("[]"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
         assertEquals(0, userRepository.findAll().size());
     }
 
