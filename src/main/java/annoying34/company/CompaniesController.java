@@ -2,8 +2,7 @@ package annoying34.company;
 
 import annoying34.communication.User;
 import annoying34.communication.UserService;
-import annoying34.mail.MailException;
-import annoying34.mail.MailService;
+import annoying34.mail.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +55,17 @@ public class CompaniesController {
         List<Company> companies = companyService.getCompanysByID(companyIds);
 
         if (!StringUtils.isEmpty(password)) {
+
+            if (StringUtils.isEmpty(smtpURL)) {
+                try {
+                    ServerConfig config = ServerListAccessor.getServerConfig(new MailAddress(email).getDomain());
+                    smtpURL = config.getSmtpServer().getHostname();
+                } catch (Exception e) {
+                    log.error("No SMTP address found or given");
+                    return new ResponseEntity<String>("No SMTP address found or given", HttpStatus.BAD_REQUEST);
+                }
+            }
+
             //send mails, if password was given
             try {
                 mailService.sendMail(name, email, password, smtpURL, companies);

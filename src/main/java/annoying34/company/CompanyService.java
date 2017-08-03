@@ -78,7 +78,7 @@ public class CompanyService {
 
             if (!StringUtils.isEmpty(result.email)) {
                 Company company = new Company(result.name, result.email, result.favicon, domain, true);
-                companyRepository.save(company);
+                //companyRepository.save(company);
                 log.info("New Company({}) saved.", company);
                 foundCompany = Optional.of(company);
             } else {
