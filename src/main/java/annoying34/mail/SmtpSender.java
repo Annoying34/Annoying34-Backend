@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -46,7 +47,7 @@ public class SmtpSender extends MailAccessor {
             message.setSubject(subject);
             message.setText(content);
 
-            //Transport.send(message);
+            Transport.send(message);
             log.error("Email: " + message);
         } catch (MessagingException e) {
             throw new MailException("Error while sending message", e);
