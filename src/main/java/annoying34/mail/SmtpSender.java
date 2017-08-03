@@ -46,8 +46,8 @@ public class SmtpSender extends MailAccessor {
             message.setSubject(subject);
             message.setText(content);
 
-            //Transport.send(message);
-            log.error("Email: " + message);
+            Transport.send(message);
+            //log.error("Email: " + message);
         } catch (MessagingException e) {
             throw new MailException("Error while sending message", e);
         }
